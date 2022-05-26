@@ -18,8 +18,8 @@ const sourceCode = `
 app.use(express.json());
 
 app.post('/submit', (req, res) => {
-    const upContainerAndRunCode = (code) => {
-        exec(`docker run -e SOURCE_CODE="$SOURCE_CODE" js-runtime:latest`, {env: {"SOURCE_CODE": code}},  (err, stdout, stderr) => {
+    const upContainerAndRunCode = (code, language) => {
+        exec(`docker run -e SOURCE_CODE="$SOURCE_CODE" ${language}-runtime:latest`, {env: {"SOURCE_CODE": code}},  (err, stdout, stderr) => {
             if(err) {
                 console.error(err);
                 res.send(stderr);
@@ -30,7 +30,7 @@ app.post('/submit', (req, res) => {
             }   
         });
     }
-    upContainerAndRunCode(req.body.code);
+    upContainerAndRunCode(req.body.code, req.body.language);
 })
 
 
